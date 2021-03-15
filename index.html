@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+         table, th, td {
+            border: 1px solid black;
+            text-align: center;
+            margin: auto;
+        }
+
+        p {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align:center;">DATA COVID 19 INDONESIA</h1>
+    <p id="posi"></p>
+    <p id="semb"></p>
+    <p id="meni"></p>
+   
+    <div id="tabelCovid"></div>
+   
+   <script>
+        fetch('https://indonesia-covid-19.mathdro.id/api/provinsi')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.data)
+         
+            let jumlahPositif = 0
+            let jumlahSembuh = 0
+            let jumlahMeninggal = 0
+
+                data.data.forEach(objCovid => {
+
+                    jumlahPositif += objCovid.kasusPosi
+                    jumlahSembuh += objCovid.kasusSemb
+                    jumlahMeninggal += objCovid.kasusMeni
+                });
+
+                document.getElementById("posi").innerHTML = `Positif : ${jumlahPositif}`
+                document.getElementById("semb").innerHTML = `Sembuh : ${jumlahSembuh}`
+                document.getElementById("meni").innerHTML = `Meninggal : ${jumlahMeninggal}`
+
+                let txt = ""
+
+                txt += `<table border='1'>
+                            <tr>
+                                <th>Provinsi</th>
+                                <th>Positif</th>
+                                <th>Sembuh</th>
+                                <th>Meninggal</th>
+                            </tr>
+                                `
+                data.data.forEach(objCovid => {
+                    txt += "<tr>"
+                    txt += `<td> ${objCovid.provinsi} </td>`;
+                    txt += `<td> ${objCovid.kasusPosi}"</td>`;
+                    txt += `<td> ${objCovid.kasusSemb} </td>`;
+                    txt += `<td> ${objCovid.kasusMeni} </td>`;
+                    txt += "</tr>";
+                });
+
+                txt += "</table>"
+                document.getElementById("tabelCovid").innerHTML = txt;
+            })
+            .catch(error => console.log(error))
+   </script>
+</body>
+
+</html>
